@@ -12,7 +12,7 @@ export interface Paper {
 export const simplifyPaper = async (url: string, paper?: Paper) => {
   // check if we have cached result first
   const { origin, pathname } = new URL(url);
-  const storageKey = `simplified-${origin}${pathname}`;
+  const storageKey = `v1-simplified-${origin}${pathname}`;
   const cached = await getCache<Paper>(storageKey);
   if (cached) return cached;
 
@@ -49,6 +49,6 @@ Abstract:
 ${abstract}`,
   });
 
-  await setCache(storageKey, result);
+  await setCache<Paper>(storageKey, result.object);
   return result.object;
 };
