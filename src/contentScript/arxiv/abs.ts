@@ -3,14 +3,15 @@ import { simplifyPaper } from './common';
 // get original title and abstract
 const titleElement = document.querySelector('#content .title')!;
 const abstractElement = document.querySelector('#content .abstract')!;
-const title = titleElement.textContent!.trim().replace(/^Title:/, '');
-const abstract = abstractElement.textContent!.trim().replace(/^Abstract:/, '');
+const title = titleElement.textContent!.trim().replace(/^Title:\s*/, '');
+const abstract = abstractElement.textContent!.trim().replace(/^Abstract:\s*/, '');
 
 async function main() {
-  titleElement.textContent = `⏳ ${titleElement.textContent}`;
-  abstractElement.textContent = `⏳ ${abstractElement.textContent}`;
+  titleElement.textContent = `⏳ ${title}`;
+  abstractElement.textContent = `⏳ ${abstract}`;
 
-  const simplified = await simplifyPaper(location.href, { title, abstract });
+  const url = location.href;
+  const simplified = await simplifyPaper(url, { url, title, abstract });
 
   titleElement.outerHTML = `
     <h1 class="title" style="background-color: rgba(255,255,0,0.2)">${simplified.title}</h1>

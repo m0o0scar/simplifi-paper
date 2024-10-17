@@ -15,6 +15,13 @@ export const Options = () => {
     alert('Saved!');
   };
 
+  const clearStorage = async () => {
+    const allKeys: string[] = Object.keys(await chrome.storage.local.get());
+    const keys = allKeys.filter((key) => !['apiKeys'].includes(key));
+    await chrome.storage.local.remove(keys);
+    alert('Storage cleared!');
+  };
+
   useEffect(() => {
     (async () => {
       const { openAIKey = '', googleGeminiKey = '' } =
@@ -39,8 +46,9 @@ export const Options = () => {
           onChange={(e) => setGoogleGeminiKey(e.target.value)}
         />
       </p>
-      <p>
+      <p style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
         <button onClick={save}>Save</button>
+        <button onClick={clearStorage}>Clear Storage</button>
       </p>
     </div>
   );

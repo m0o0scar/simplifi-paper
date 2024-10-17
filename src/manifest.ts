@@ -1,9 +1,9 @@
-import { defineManifest } from '@crxjs/vite-plugin'
+import { defineManifest } from '@crxjs/vite-plugin';
 
-import packageData from '../package.json'
+import packageData from '../package.json';
 
 //@ts-ignore
-const isDev = process.env.NODE_ENV == 'development'
+const isDev = process.env.NODE_ENV == 'development';
 
 export default defineManifest({
   name: `${packageData.displayName || packageData.name}${isDev ? ` ➡️ Dev` : ''}`,
@@ -19,10 +19,9 @@ export default defineManifest({
     128: 'img/logo-128.png',
   },
 
-  // action: {
-  //   default_popup: 'popup.html',
-  //   default_icon: 'img/logo-48.png',
-  // },
+  action: {
+    default_icon: 'img/logo-48.png',
+  },
 
   options_page: 'options.html',
 
@@ -36,6 +35,10 @@ export default defineManifest({
       matches: ['https://arxiv.org/abs/*'],
       js: ['src/contentScript/arxiv/abs.ts'],
     },
+    {
+      matches: ['https://arxiv.org/list/*'],
+      js: ['src/contentScript/arxiv/list.ts'],
+    },
   ],
 
   web_accessible_resources: [
@@ -44,4 +47,4 @@ export default defineManifest({
       matches: [],
     },
   ],
-})
+});
