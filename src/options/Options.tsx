@@ -34,6 +34,7 @@ export const Options = () => {
 
   return (
     <div>
+      <h1>LLM API Key</h1>
       <p>
         OpenAI API Key:{' '}
         <input type="password" value={openAIKey} onChange={(e) => setOpenAIKey(e.target.value)} />
