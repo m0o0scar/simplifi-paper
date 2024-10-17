@@ -2,22 +2,26 @@ import './Options.css';
 
 import { useEffect, useState } from 'react';
 
+import { LLMApiKeys } from '../shared/llm';
+import { getCache, setCache } from '../shared/storage';
+
 export const Options = () => {
   const [openAIKey, setOpenAIKey] = useState('');
   const [googleGeminiKey, setGoogleGeminiKey] = useState('');
 
   const save = async () => {
-    await chrome.storage.local.set({ apiKeys: { openAIKey, googleGeminiKey } });
+    const keys: LLMApiKeys = { openAIKey, googleGeminiKey };
+    await setCache('apiKeys', keys);
     alert('Saved!');
   };
 
   useEffect(() => {
     (async () => {
-      const { apiKeys } = await chrome.storage.local.get('apiKeys');
-      if (apiKeys) {
-        setOpenAIKey(apiKeys.openAIKey || '');
-        setGoogleGeminiKey(apiKeys.googleGeminiKey || '');
-      }
+      const { openAIKey = '', googleGeminiKey = '' } =
+        (await getCache<LLMApiKeys>('apiKeys')) || {};
+
+      setOpenAIKey(openAIKey);
+      setGoogleGeminiKey(googleGeminiKey);
     })();
   }, []);
 
