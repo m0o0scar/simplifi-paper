@@ -6,6 +6,20 @@ const abstractElement = document.querySelector('#content .abstract')!;
 const title = titleElement.textContent!.trim().replace(/^Title:\s*/, '');
 const abstract = abstractElement.textContent!.trim().replace(/^Abstract:\s*/, '');
 
+function insertRifmLink() {
+  const rifmLink = document.createElement('a');
+  rifmLink.classList.add('abs-button');
+  rifmLink.href = `https://rifm.vercel.app?source=${encodeURIComponent(location.href)}`;
+  rifmLink.target = '_blank';
+  rifmLink.textContent = '📖 Read it for me';
+
+  const rifmLi = document.createElement('li');
+  rifmLi.appendChild(rifmLink);
+
+  const downloadPdfButtonLi = document.querySelector('li:has(> a.download-pdf)') as HTMLLIElement;
+  downloadPdfButtonLi.parentElement?.appendChild(rifmLi);
+}
+
 async function main() {
   titleElement.textContent = `⏳ ${title}`;
   abstractElement.textContent = `⏳ ${abstract}`;
@@ -24,4 +38,5 @@ async function main() {
   `;
 }
 
+insertRifmLink();
 main();

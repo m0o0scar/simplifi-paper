@@ -1,4 +1,10 @@
-import { Paper, simplifyPapers } from './common';
+import { simplifyPapers } from './common';
+
+function findAllPaperAnchors() {
+  return [
+    ...document.querySelectorAll('#articles > dt > a[title="Abstract"]'),
+  ] as HTMLAnchorElement[];
+}
 
 function updateListItem(
   url: string,
@@ -15,14 +21,30 @@ function updateListItem(
   }
 }
 
+function insertRifmLinks() {
+  const anchors = findAllPaperAnchors();
+  for (const anchor of anchors) {
+    const parent = anchor.parentElement;
+    const lastChild = parent!.lastChild;
+
+    const comma = document.createElement('span');
+    comma.textContent = ', ';
+
+    const link = document.createElement('a');
+    link.innerText = '📖 rifm';
+    link.target = '_blank';
+    link.href = `https://rifm.vercel.app?source=${encodeURIComponent(anchor.href)}`;
+
+    parent!.insertBefore(comma, lastChild);
+    parent!.insertBefore(link, lastChild);
+  }
+}
+
 async function simplifiedPapersInList() {
-  // find all the paper links from list page
-  const anchors = document.querySelectorAll(
-    '#articles > dt > a[title="Abstract"]',
-  ) as NodeListOf<HTMLAnchorElement>;
+  const anchors = findAllPaperAnchors();
 
   // find all the paper urls
-  const urls = [...new Set([...anchors].map((anchor) => anchor.href))];
+  const urls = [...new Set(anchors.map((anchor) => anchor.href))];
   let remainingUrls = [...urls];
 
   // show loading
@@ -52,4 +74,5 @@ async function simplifiedPapersInList() {
   );
 }
 
+insertRifmLinks();
 simplifiedPapersInList();
